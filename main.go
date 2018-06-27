@@ -19,11 +19,8 @@ type Component interface {
 	RenderToString() (string, error)
 }
 
-type Props struct {
-}
-
 type GenericComponent struct {
-	props    Props
+	props    interface{}
 	template *template.Template
 	targetID string
 }
@@ -40,14 +37,14 @@ func (c *GenericComponent) Render() error {
 
 func (c *GenericComponent) RenderToString() (string, error) {
 	buf := new(bytes.Buffer)
-	err := c.template.Execute(buf, "")
+	err := c.template.Execute(buf, c.props)
 	if err != nil {
 		return "", err
 	}
 	return buf.String(), nil
 }
 
-func NewComponent(templateID, targetID string) (Component, error) {
+func NewComponent(templateID, targetID string, propsFn func(*GenericComponent) error) (Component, error) {
 	cmp := &GenericComponent{}
 	markup := js.Global().Get("document").Call("getElementById", templateID).Get("innerHTML").String()
 
@@ -59,6 +56,12 @@ func NewComponent(templateID, targetID string) (Component, error) {
 
 	cmp.template = tmpl
 	cmp.targetID = targetID
+
+	err = propsFn(cmp)
+
+	if err != nil {
+		return cmp, err
+	}
 
 	return cmp, nil
 }
@@ -73,7 +76,16 @@ func main() {
 	js.Global().Get("document").Call("getElementById", "myText").Call("addEventListener", "input", cb)
 	js.Global().Get("document").Call("getElementById", "runButton").Set("disabled", true)
 
-	cmp, err := NewComponent("helloTemplate", "root")
+	cmp, err := NewComponent("helloTemplate", "root", func(cmp *GenericComponent) error {
+		cmp.props = struct {
+			Label string
+		}{
+			Label: "markup from props",
+		}
+
+		return nil
+	})
+
 	checkErr(err)
 	checkErr(cmp.Render())
 
