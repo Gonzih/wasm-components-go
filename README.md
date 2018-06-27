@@ -4,8 +4,7 @@
 Installing go beta1:
 
 ```
-go get golang.org/x/build/version/go1.11beta1
-go1.11beta1 download
+make setup
 ```
 
 Running the example:

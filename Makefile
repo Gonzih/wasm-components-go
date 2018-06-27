@@ -12,3 +12,7 @@ server-main:
 
 run-server: server-main
 	./server-main
+
+setup:
+	go get golang.org/x/build/version/go1.11beta1
+	go1.11beta1 download
