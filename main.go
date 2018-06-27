@@ -48,7 +48,7 @@ func NewComponent(templateID, targetID string, propsFn func(*GenericComponent) e
 	cmp := &GenericComponent{}
 	markup := js.Global().Get("document").Call("getElementById", templateID).Get("innerHTML").String()
 
-	tmpl, err := template.New("component").Parse(markup)
+	tmpl, err := template.New(templateID).Parse(markup)
 
 	if err != nil {
 		return cmp, err
