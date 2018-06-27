@@ -26,7 +26,6 @@ license that can be found in the LICENSE file.
 		WebAssembly.instantiateStreaming(fetch("example.wasm"), go.importObject).then((result) => {
 			mod = result.module;
 			inst = result.instance;
-			document.getElementById("runButton").disabled = false;
             run();
 		});
 
@@ -37,13 +36,10 @@ license that can be found in the LICENSE file.
 		}
 	</script>
 
-	<button onClick="run();" id="runButton" disabled>Run</button>
-    <input type="text" id="myText" value="" />
-
-
     <template id="helloTemplate">
         <span>{{.Label}}</span>
     </template>
+
     <div id="root"></div>
 </body>
 
