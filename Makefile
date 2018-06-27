@@ -1,5 +1,5 @@
 build: clean
-	env GOROOT=$(HOME)/go-projects/src/wasm-test/go/ GOARCH=wasm GOOS=js go1.11beta1 build -o example.wasm main.go
+	env GOROOT=$(HOME)/go-projects/src/wasm-test/go/ GOARCH=wasm GOOS=js go1.11beta1 build -o example.wasm *.go
 
 clean:
 	rm -f example.wasm
