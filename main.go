@@ -11,6 +11,8 @@ func checkErr(err error) {
 	}
 }
 
+var globalObserver *Observer
+
 func main() {
 	// c := make(chan struct{}, 0)
 
