@@ -4,15 +4,21 @@ import (
 	"bytes"
 	"html/template"
 	"syscall/js"
+
+	"github.com/google/uuid"
 )
 
 type GenericComponent struct {
-	props    interface{}
-	template *template.Template
-	targetID string
+	props       interface{}
+	propsFn     func(*GenericComponent) error
+	template    *template.Template
+	targetID    string
+	componentID string
 }
 
 func (c *GenericComponent) Render() error {
+	globalObserver.SetContext(c.componentID)
+
 	html, err := c.RenderToString()
 	if err != nil {
 		return err
@@ -23,8 +29,14 @@ func (c *GenericComponent) Render() error {
 }
 
 func (c *GenericComponent) RenderToString() (string, error) {
+	err := c.propsFn(c)
+
+	if err != nil {
+		return "", err
+	}
+
 	buf := new(bytes.Buffer)
-	err := c.template.Execute(buf, c.props)
+	err = c.template.Execute(buf, c.props)
 	if err != nil {
 		return "", err
 	}
@@ -43,12 +55,8 @@ func NewComponent(templateID, targetID string, propsFn func(*GenericComponent) e
 
 	cmp.template = tmpl
 	cmp.targetID = targetID
-
-	err = propsFn(cmp)
-
-	if err != nil {
-		return cmp, err
-	}
+	cmp.propsFn = propsFn
+	cmp.componentID = uuid.New().String()
 
 	return cmp, nil
 }

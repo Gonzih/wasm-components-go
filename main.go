@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func checkErr(err error) {
@@ -11,18 +12,32 @@ func checkErr(err error) {
 	}
 }
 
-var globalObserver *Observer
-
 func main() {
-	// c := make(chan struct{}, 0)
+	c := make(chan struct{}, 0)
 
-	// store := NewStore()
+	store := NewStore()
+
+	store.Set("label", "hello from the store")
+	store.Set("count", 0)
+
+	go func() {
+		for {
+			store.Update("count", func(i interface{}) interface{} {
+				return i.(int) + 1
+			})
+			time.Sleep(time.Second * 5)
+		}
+	}()
 
 	cmp, err := NewComponent("helloTemplate", "root", func(cmp *GenericComponent) error {
 		cmp.props = struct {
+			ID    string
 			Label string
+			Count int
 		}{
-			Label: "markup from props",
+			ID:    cmp.componentID,
+			Label: store.GetString("label"),
+			Count: store.GetInt("count"),
 		}
 
 		return nil
@@ -31,5 +46,7 @@ func main() {
 	checkErr(err)
 	checkErr(cmp.Render())
 
-	// <-c
+	fmt.Println(globalObserver)
+
+	<-c
 }
