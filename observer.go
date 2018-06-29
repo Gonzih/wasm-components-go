@@ -8,15 +8,15 @@ var globalObserver Observer
 
 type Observer interface {
 	Register(string)
-	SetContext(string)
+	SetContext(func())
 	Notify(string)
 	StartRecording()
 	StopRecording()
 }
 
 type GlobalObserver struct {
-	currentContext string
-	dependencies   map[string][]string
+	currentContext func()
+	dependencies   map[string][]func()
 	recordingStage bool
 }
 
@@ -34,26 +34,27 @@ func (g *GlobalObserver) Register(key string) {
 	}
 }
 
-func (g *GlobalObserver) SetContext(id string) {
+func (g *GlobalObserver) SetContext(notifyFn func()) {
 	if g.recordingStage {
-		g.currentContext = id
+		g.currentContext = notifyFn
 	}
 }
 
 func (g *GlobalObserver) Notify(key string) {
 	log.Printf("Got notified that key %s changed\n", key)
 
-	for k, ids := range g.dependencies {
+	for k, fns := range g.dependencies {
 		if k == key {
-			for _, id := range ids {
-				log.Printf("Component %s should be notified\n", id)
+			log.Printf("Notifying that key %s has changed", key)
+			for _, fn := range fns {
+				fn()
 			}
 		}
 	}
 }
 
 func NewObserver() Observer {
-	return &GlobalObserver{dependencies: make(map[string][]string, 0)}
+	return &GlobalObserver{dependencies: make(map[string][]func(), 0)}
 }
 
 func InitObserver() {

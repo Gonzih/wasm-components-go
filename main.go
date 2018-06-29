@@ -52,7 +52,7 @@ func main() {
 	go func() {
 		for {
 			checkErr(cmp.Render())
-			time.Sleep(time.Second)
+			time.Sleep(time.Millisecond * 100)
 		}
 	}()
 
