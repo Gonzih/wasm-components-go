@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -46,7 +47,16 @@ func main() {
 	checkErr(err)
 	checkErr(cmp.Render())
 
-	fmt.Println(globalObserver)
+	globalObserver.StopRecording()
+
+	go func() {
+		for {
+			checkErr(cmp.Render())
+			time.Sleep(time.Second)
+		}
+	}()
+
+	log.Println(globalObserver)
 
 	<-c
 }
