@@ -10,7 +10,7 @@ wasm_exec.%:
 	cp go/misc/wasm/$@ .
 
 clean:
-	rm -f test.wasm wasm_exec.html wasm_exec.js
+	rm -f test.wasm
 
 godoc:
 	env GO111MODULE=on GOROOT=$(HOME)/go-projects/src/wasm-test/go/ godoc -http=:6060
