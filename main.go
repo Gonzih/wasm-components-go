@@ -15,6 +15,7 @@ func must(err error) {
 
 func main() {
 	log.Println("Starting wasm code!")
+	fmt.Println("START")
 
 	store := NewStore()
 

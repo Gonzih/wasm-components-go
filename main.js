@@ -10,7 +10,7 @@ let mod, inst;
 WebAssembly.instantiateStreaming(fetch("test.wasm"), go.importObject).then((result) => {
     mod = result.module;
     inst = result.instance;
-    console.log("Should be running!");
+    run();
 });
 
 async function run() {

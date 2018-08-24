@@ -25,35 +25,37 @@ func (c *GenericComponent) Notify() {
 }
 
 func (c *GenericComponent) RenderToString() (string, error) {
-	return string(c.tree.HTML()), nil
+	buf := new(bytes.Buffer)
+
+	err := c.propsFn(c)
+
+	if err != nil {
+		return buf.String(), err
+	}
+
+	err = c.template.Execute(buf, c.props)
+	if err != nil {
+		return buf.String(), err
+	}
+
+	return buf.String(), nil
 }
 
 func (c *GenericComponent) Render() error {
 	if c.dirty {
+
+		globalObserver.SetContext(c.Notify)
+
+		log.Println("Regenerating dom tree")
+
+		root := js.Global().Get("document").Call("getElementById", c.targetID)
+		html, err := c.RenderToString()
+		if err != nil {
+			return err
+		}
+		root.Set("innerHTML", html)
+		c.dirty = false
 	}
-
-	globalObserver.SetContext(c.Notify)
-
-	log.Println("Regenerating dom tree")
-	err := c.propsFn(c)
-
-	if err != nil {
-		return err
-	}
-
-	buf := new(bytes.Buffer)
-
-	err = c.template.Execute(buf, c.props)
-	if err != nil {
-		return err
-	}
-
-	root := js.Global().Get("document").Call("getElementById", c.targetID)
-	html, err := c.RenderToString()
-	if err != nil {
-		return err
-	}
-	root.Set("innerHTML", html)
 
 	return nil
 }
