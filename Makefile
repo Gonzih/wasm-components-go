@@ -30,6 +30,6 @@ $(GOPATH)/bin/$(GOVERSION):
 
 go:
 	wget https://dl.google.com/go/$(GOVERSION).src.tar.gz -O /tmp/$(GOVERSION).src.tar.gz
-	tar xvzf /tmp/$(GOVERSION).src.tar.gz
+	tar xzf /tmp/$(GOVERSION).src.tar.gz
 
 .PHONY: setup clean godoc run-server
