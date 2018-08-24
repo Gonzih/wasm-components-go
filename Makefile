@@ -1,22 +1,33 @@
-build: clean go
-	env GOROOT=$(HOME)/go-projects/src/wasm-test/go/ GOARCH=wasm GOOS=js go1.11beta1 build -o example.wasm *.go
+GOVERSION:=go1.11rc2
+WASM_HELPERS:=wasm_exec.html wasm_exec.js
+
+all: clean go $(WASM_HELPERS) test.wasm
+
+%.wasm:
+	env GO111MODULE=on GOROOT=$(HOME)/go-projects/src/wasm-test/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@ *.go
+
+wasm_exec.%:
+	cp go/misc/wasm/$@ .
 
 clean:
-	rm -f example.wasm
+	rm -f test.wasm wasm_exec.html wasm_exec.js
 
 godoc:
-	env GOROOT=$(HOME)/go-projects/src/wasm-test/go/ godoc -http=:6060
+	env GO111MODULE=on GOROOT=$(HOME)/go-projects/src/wasm-test/go/ godoc -http=:6060
 
 server-main:
-	go build -o server-main server/main.go
+	env GO111MODULE=on $(GOVERSION) build -o server-main server/main.go
 
 run-server: server-main
+	@echo http://localhost:3000/wasm_exec.html
 	./server-main
 
 setup:
-	go get golang.org/x/build/version/go1.11beta1
-	go1.11beta1 download
+	go get golang.org/dl/$(GOVERSION)
+	$(GOVERSION) download
 
 go:
-	wget https://dl.google.com/go/go1.11beta1.src.tar.gz -O /tmp/go1.11beta1.src.tar.gz
-	tar xvzf /tmp/go1.11beta1.src.tar.gz
+	wget https://dl.google.com/go/$(GOVERSION).src.tar.gz -O /tmp/$(GOVERSION).src.tar.gz
+	tar xvzf /tmp/$(GOVERSION).src.tar.gz
+
+.PHONY: setup clean godoc run-server

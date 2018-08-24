@@ -2,3 +2,6 @@ go/
 example.wasm
 server-main
 go_js_wasm_exec
+test.wasm
+wasm_exec.html
+wasm_exec.js
