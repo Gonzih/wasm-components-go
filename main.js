@@ -7,10 +7,10 @@ if (!WebAssembly.instantiateStreaming) { // polyfill
 
 const go = new Go();
 let mod, inst;
-WebAssembly.instantiateStreaming(fetch("example.wasm"), go.importObject).then((result) => {
+WebAssembly.instantiateStreaming(fetch("test.wasm"), go.importObject).then((result) => {
     mod = result.module;
     inst = result.instance;
-    run();
+    console.log("Should be running!");
 });
 
 async function run() {

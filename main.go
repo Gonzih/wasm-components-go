@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func checkErr(err error) {
+func must(err error) {
 	if err != nil {
 		fmt.Printf("Error: %s\r\n", err)
 		panic(err)
@@ -14,6 +14,8 @@ func checkErr(err error) {
 }
 
 func main() {
+	log.Println("Starting wasm code!")
+
 	c := make(chan struct{}, 0)
 
 	store := NewStore()
@@ -44,14 +46,14 @@ func main() {
 		return nil
 	})
 
-	checkErr(err)
-	checkErr(cmp.Render())
+	must(err)
+	must(cmp.Render())
 
 	globalObserver.StopRecording()
 
 	go func() {
 		for {
-			checkErr(cmp.Render())
+			must(cmp.Render())
 			time.Sleep(time.Millisecond * 100)
 		}
 	}()
