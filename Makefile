@@ -1,7 +1,7 @@
 GOVERSION:=go1.11rc2
 WASM_HELPERS:=wasm_exec.html wasm_exec.js
 
-all: clean go $(WASM_HELPERS) test.wasm
+all: clean go $(WASM_HELPERS) test.wasm server-main
 
 %.wasm:
 	env GO111MODULE=on GOROOT=$(shell pwd)/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@ *.go
