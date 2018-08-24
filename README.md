@@ -1,16 +1,10 @@
 # Getting started with WASM and Go
 
 
-Installing go beta1:
+Trying this out:
 
 ```
-make setup
-```
-
-Running the example:
-
-```
-make build run-server
+make all run-server
 ```
 
 Now you can navigate to http://localhost:3000/wasm_exec.html to see the demo

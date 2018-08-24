@@ -1,7 +1,9 @@
 GOVERSION:=go1.11rc2
 WASM_HELPERS:=wasm_exec.html wasm_exec.js
 
-all: clean go $(WASM_HELPERS) test.wasm server-main
+all: clean go setup $(WASM_HELPERS) test.wasm server-main
+
+setup: $(GOPATH)/bin/$(GOVERSION)
 
 %.wasm:
 	env GO111MODULE=on GOROOT=$(shell pwd)/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@ *.go
@@ -22,7 +24,7 @@ run-server: server-main
 	@echo http://localhost:3000/wasm_exec.html
 	./server-main
 
-setup:
+$(GOPATH)/bin/$(GOVERSION):
 	go get golang.org/dl/$(GOVERSION)
 	$(GOVERSION) download
 
