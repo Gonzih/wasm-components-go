@@ -1,5 +1,6 @@
-# Getting started with WASM and Go
+[![Build Status](https://travis-ci.org/Gonzih/wasm-components-go.svg?branch=master)](https://travis-ci.org/Gonzih/wasm-components-go)
 
+# Getting started with WASM and Go
 
 Trying this out:
 
