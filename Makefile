@@ -4,7 +4,7 @@ WASM_HELPERS:=wasm_exec.html wasm_exec.js
 all: clean go $(WASM_HELPERS) test.wasm
 
 %.wasm:
-	env GO111MODULE=on GOROOT=$(HOME)/go-projects/src/wasm-test/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@ *.go
+	env GO111MODULE=on GOROOT=$(shell pwd)/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@ *.go
 
 wasm_exec.%:
 	cp go/misc/wasm/$@ .
@@ -13,7 +13,7 @@ clean:
 	rm -f test.wasm
 
 godoc:
-	env GO111MODULE=on GOROOT=$(HOME)/go-projects/src/wasm-test/go/ godoc -http=:6060
+	env GO111MODULE=on GOROOT=$(shell pwd)/go/ godoc -http=:6060
 
 server-main:
 	env GO111MODULE=on $(GOVERSION) build -o server-main server/main.go

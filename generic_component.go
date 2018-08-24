@@ -30,43 +30,22 @@ func (c *GenericComponent) RenderToString() (string, error) {
 
 func (c *GenericComponent) Render() error {
 	if c.dirty {
-		globalObserver.SetContext(c.Notify)
+	}
 
-		log.Println("Regenerating dom tree")
-		err := c.propsFn(c)
+	globalObserver.SetContext(c.Notify)
 
-		if err != nil {
-			return err
-		}
+	log.Println("Regenerating dom tree")
+	err := c.propsFn(c)
 
-		buf := new(bytes.Buffer)
+	if err != nil {
+		return err
+	}
 
-		err = c.template.Execute(buf, c.props)
-		if err != nil {
-			return err
-		}
+	buf := new(bytes.Buffer)
 
-		newTree, err := vdom.Parse(buf.Bytes())
-		if err != nil {
-			return err
-		}
-
-		if c.tree != nil && len(c.targetID) > 0 {
-			// Calculate the diff between this render and the last render
-			// patches, err := vdom.Diff(c.tree, newTree)
-			// if err != nil {
-			// 	return err
-			// }
-
-			// Effeciently apply changes to the actual DOM
-			// root := js.Global().Get("document").Call("getElementById", c.targetID)
-			// if err := patches.Patch(root); err != nil {
-			// 	return err
-			// }
-		}
-
-		c.tree = newTree
-		c.dirty = false
+	err = c.template.Execute(buf, c.props)
+	if err != nil {
+		return err
 	}
 
 	root := js.Global().Get("document").Call("getElementById", c.targetID)

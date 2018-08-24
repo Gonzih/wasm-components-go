@@ -16,8 +16,6 @@ func must(err error) {
 func main() {
 	log.Println("Starting wasm code!")
 
-	c := make(chan struct{}, 0)
-
 	store := NewStore()
 
 	store.Set("label", "hello from the store")
@@ -60,5 +58,5 @@ func main() {
 
 	log.Println(globalObserver)
 
-	<-c
+	select {}
 }
