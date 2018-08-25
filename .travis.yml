@@ -6,4 +6,4 @@ go:
 install:
   - make setup
 
-script: make
+script: make && make test
