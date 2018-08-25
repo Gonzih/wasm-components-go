@@ -9,7 +9,10 @@ setup: $(GOPATH)/bin/$(GOVERSION)
 	env GO111MODULE=on GOROOT=$(shell pwd)/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@
 
 test:
-	$(GOVERSION) test
+	env GO111MODULE=on GOROOT=$(shell pwd)/go/ $(GOVERSION) test
+
+update:
+	env GO111MODULE=on GOROOT=$(shell pwd)/go/ $(GOVERSION) get -u
 
 wasm_exec.%:
 	cp go/misc/wasm/$@ .
