@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"log"
 
-	"github.com/albrow/vdom"
 	"github.com/google/uuid"
 )
 
@@ -13,7 +12,6 @@ type GenericComponent struct {
 	props       interface{}
 	propsFn     func(*GenericComponent) error
 	template    *template.Template
-	tree        *vdom.Tree
 	dirty       bool
 	targetID    string
 	componentID string
