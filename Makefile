@@ -6,7 +6,10 @@ all: clean go setup $(WASM_HELPERS) test.wasm server-main
 setup: $(GOPATH)/bin/$(GOVERSION)
 
 %.wasm:
-	env GO111MODULE=on GOROOT=$(shell pwd)/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@ *.go
+	env GO111MODULE=on GOROOT=$(shell pwd)/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@
+
+test:
+	$(GOVERSION) test
 
 wasm_exec.%:
 	cp go/misc/wasm/$@ .

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"html/template"
 	"log"
-	"syscall/js"
 
 	"github.com/albrow/vdom"
 	"github.com/google/uuid"
@@ -48,12 +47,11 @@ func (c *GenericComponent) Render() error {
 
 		log.Println("Regenerating dom tree")
 
-		root := js.Global().Get("document").Call("getElementById", c.targetID)
 		html, err := c.RenderToString()
 		if err != nil {
 			return err
 		}
-		root.Set("innerHTML", html)
+		domHelper.SetInnerHTMLByID(c.targetID, html)
 		c.dirty = false
 	}
 
@@ -62,7 +60,7 @@ func (c *GenericComponent) Render() error {
 
 func NewComponent(templateID, targetID string, propsFn func(*GenericComponent) error) (Component, error) {
 	c := &GenericComponent{}
-	markup := js.Global().Get("document").Call("getElementById", templateID).Get("innerHTML").String()
+	markup, _ := domHelper.GetInnerHTMLByID(templateID)
 
 	tmpl, err := template.New(templateID).Parse(markup)
 

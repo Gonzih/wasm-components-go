@@ -1,0 +1,8 @@
+github.com/albrow/vdom v0.0.0-20170307220345-10181bf62825 h1:0gn3v9SH0YX+ZsI4eh4PSbNPPBOC0pKIIfp6ZTtynMM=
+github.com/albrow/vdom v0.0.0-20170307220345-10181bf62825/go.mod h1:fNd8+IQXBuLmfq6HsFKRdnIBmMaitNsq98vLL4B9gJY=
+github.com/google/uuid v0.0.0-20171129191014-dec09d789f3d h1:rXQlD9GXkjA/PQZhmEaF/8Pj/sJfdZJK7GJG0gkS8I0=
+github.com/google/uuid v0.0.0-20171129191014-dec09d789f3d/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/gopherjs/gopherjs v0.0.0-20180820052304-89baedc74dd7 h1:WF7x3tAe0mEb4wf/yhSThHwZYQIjVmEGSbAH9hzOeZQ=
+github.com/gopherjs/gopherjs v0.0.0-20180820052304-89baedc74dd7/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
+honnef.co/go/js/dom v0.0.0-20180323154144-6da835bec70f h1:8wvPTUK0UjW0bwvb0Q2mdhzSf78P6dXQI6mE9v+jJvI=
+honnef.co/go/js/dom v0.0.0-20180323154144-6da835bec70f/go.mod h1:sUMDUKNB2ZcVjt92UnLy3cdGs+wDAcrPdV3JP6sVgA4=
