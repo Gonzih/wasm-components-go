@@ -3,7 +3,4 @@ language: go
 go:
   - tip
 
-install:
-  - make setup
-
 script: make && make test

@@ -4,5 +4,7 @@ github.com/google/uuid v0.0.0-20171129191014-dec09d789f3d h1:rXQlD9GXkjA/PQZhmEa
 github.com/google/uuid v0.0.0-20171129191014-dec09d789f3d/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/gopherjs/gopherjs v0.0.0-20180820052304-89baedc74dd7 h1:WF7x3tAe0mEb4wf/yhSThHwZYQIjVmEGSbAH9hzOeZQ=
 github.com/gopherjs/gopherjs v0.0.0-20180820052304-89baedc74dd7/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
+golang.org/x/net v0.0.0-20180911220305-26e67e76b6c3 h1:czFLhve3vsQetD6JOJ8NZZvGQIXlnN3/yXxbT6/awxI=
+golang.org/x/net v0.0.0-20180911220305-26e67e76b6c3/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 honnef.co/go/js/dom v0.0.0-20180323154144-6da835bec70f h1:8wvPTUK0UjW0bwvb0Q2mdhzSf78P6dXQI6mE9v+jJvI=
 honnef.co/go/js/dom v0.0.0-20180323154144-6da835bec70f/go.mod h1:sUMDUKNB2ZcVjt92UnLy3cdGs+wDAcrPdV3JP6sVgA4=

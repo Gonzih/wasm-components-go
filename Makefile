@@ -1,9 +1,7 @@
 GOVERSION:=go
 WASM_HELPERS:=wasm_exec.html wasm_exec.js
 
-all: clean go setup $(WASM_HELPERS) test.wasm server-main
-
-setup: $(GOPATH)/bin/$(GOVERSION)
+all: clean $(WASM_HELPERS) test.wasm server-main
 
 %.wasm:
 	env GO111MODULE=on GOARCH=wasm GOOS=js $(GOVERSION) build -o $@
@@ -15,7 +13,7 @@ update:
 	env GO111MODULE=on $(GOVERSION) get -u
 
 wasm_exec.%:
-	cp go/misc/wasm/$@ .
+	curl https://raw.githubusercontent.com/golang/go/go1.11/misc/wasm/$@ > $@
 
 clean:
 	rm -f test.wasm
@@ -29,13 +27,5 @@ server-main:
 run-server: server-main
 	@echo http://localhost:3000/wasm_exec.html
 	./server-main
-
-$(GOPATH)/bin/$(GOVERSION):
-	go get golang.org/dl/$(GOVERSION)
-	$(GOVERSION) download
-
-go:
-	wget https://dl.google.com/go/$(GOVERSION).src.tar.gz -O /tmp/$(GOVERSION).src.tar.gz
-	tar xzf /tmp/$(GOVERSION).src.tar.gz
 
 .PHONY: setup clean godoc run-server
