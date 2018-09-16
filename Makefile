@@ -1,4 +1,4 @@
-GOVERSION:=go1.11rc2
+GOVERSION:=go
 WASM_HELPERS:=wasm_exec.html wasm_exec.js
 
 all: clean go setup $(WASM_HELPERS) test.wasm server-main
@@ -6,13 +6,13 @@ all: clean go setup $(WASM_HELPERS) test.wasm server-main
 setup: $(GOPATH)/bin/$(GOVERSION)
 
 %.wasm:
-	env GO111MODULE=on GOROOT=$(shell pwd)/go/ GOARCH=wasm GOOS=js $(GOVERSION) build -o $@
+	env GO111MODULE=on GOARCH=wasm GOOS=js $(GOVERSION) build -o $@
 
 test:
-	env GO111MODULE=on GOROOT=$(shell pwd)/go/ $(GOVERSION) test
+	env GO111MODULE=on $(GOVERSION) test
 
 update:
-	env GO111MODULE=on GOROOT=$(shell pwd)/go/ $(GOVERSION) get -u
+	env GO111MODULE=on $(GOVERSION) get -u
 
 wasm_exec.%:
 	cp go/misc/wasm/$@ .
@@ -21,7 +21,7 @@ clean:
 	rm -f test.wasm
 
 godoc:
-	env GO111MODULE=on GOROOT=$(shell pwd)/go/ godoc -http=:6060
+	env GO111MODULE=on godoc -http=:6060
 
 server-main:
 	env GO111MODULE=on $(GOVERSION) build -o server-main server/main.go
