@@ -7,6 +7,10 @@ import (
 	"golang.org/x/net/html"
 )
 
+const (
+	TEXT_TYPE = "TEXT_ELEMENT"
+)
+
 func ConstructAnElement(tt html.TokenType, z *html.Tokenizer) *El {
 	token := z.Token()
 
@@ -30,7 +34,7 @@ func ConstructAnElement(tt html.TokenType, z *html.Tokenizer) *El {
 				parent.Children = append(parent.Children, child)
 			case tt == html.TextToken:
 				t := z.Token()
-				child := &El{Type: "text", NodeValue: t.Data}
+				child := &El{Type: TEXT_TYPE, NodeValue: t.Data}
 				parent.Children = append(parent.Children, child)
 			case tt == html.EndTagToken:
 				return parent

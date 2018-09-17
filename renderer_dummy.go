@@ -21,7 +21,7 @@ func printElement(el *El, level int) error {
 	}
 
 	switch el.Type {
-	case "text":
+	case TEXT_TYPE:
 		log.Printf("%s%s", prefix, el.NodeValue)
 	case "br":
 		log.Printf("%s<%s%s/>", prefix, el.Type, attrs)
