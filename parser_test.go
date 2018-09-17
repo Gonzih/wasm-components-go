@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"strings"
@@ -17,23 +18,34 @@ type El struct {
 	SelfClosing bool
 }
 
-func (el *El) Print(level int) {
-	prefix := strings.Repeat("\t", level)
+func (el *El) Print() {
+	el.printElement(0)
+}
+
+func (el *El) printElement(level int) {
+	prefix := strings.Repeat("  ", level)
+	attrs := ""
+	for _, attr := range el.Attr {
+		attrs += fmt.Sprintf(` %s="%s"`, attr.Key, attr.Val)
+	}
+
 	if el.SelfClosing {
-		log.Printf("%s<%s %v/>", prefix, el.Tag, el.Attr)
+		log.Printf("%s<%s%s/>", prefix, el.Tag, attrs)
 	} else {
-		log.Printf("%s<%s %v>", prefix, el.Tag, el.Attr)
+		log.Printf("%s<%s%s>", prefix, el.Tag, attrs)
 		if len(el.Content) > 0 {
-			log.Printf("%s\t%s", prefix, el.Content)
+			log.Printf("%s  %s", prefix, el.Content)
 		}
 		for _, child := range el.Children {
-			child.Print(level + 1)
+			child.printElement(level + 1)
 		}
 		log.Printf("%s</%s>", prefix, el.Tag)
 	}
 }
 
-func ConstructAnElement(token *html.Token, tt html.TokenType, z *html.Tokenizer) *El {
+func ConstructAnElement(tt html.TokenType, z *html.Tokenizer) *El {
+	token := z.Token()
+
 	parent := &El{}
 
 	parent.Tag = token.Data
@@ -50,8 +62,7 @@ func ConstructAnElement(token *html.Token, tt html.TokenType, z *html.Tokenizer)
 				}
 				log.Printf("Error: %s", err)
 			case tt == html.StartTagToken:
-				t := z.Token()
-				child := ConstructAnElement(&t, tt, z)
+				child := ConstructAnElement(tt, z)
 				parent.Children = append(parent.Children, child)
 			case tt == html.TextToken:
 				t := z.Token()
@@ -59,8 +70,7 @@ func ConstructAnElement(token *html.Token, tt html.TokenType, z *html.Tokenizer)
 			case tt == html.EndTagToken:
 				break
 			case tt == html.SelfClosingTagToken:
-				t := z.Token()
-				child := ConstructAnElement(&t, tt, z)
+				child := ConstructAnElement(tt, z)
 				parent.Children = append(parent.Children, child)
 			case tt == html.CommentToken:
 				break
@@ -75,6 +85,27 @@ func ConstructAnElement(token *html.Token, tt html.TokenType, z *html.Tokenizer)
 	return parent
 }
 
+func ParseHTML(z *html.Tokenizer) *El {
+	for {
+		tt := z.Next()
+		switch {
+		case tt == html.ErrorToken:
+			err := z.Err()
+			if err == io.EOF {
+				return nil
+			}
+			log.Fatal(err)
+		case tt == html.StartTagToken:
+			return ConstructAnElement(tt, z)
+		default:
+			log.Fatalf("Wrong token type %v", tt)
+		}
+		break
+	}
+
+	return nil
+}
+
 // walk a tree
 // contsructanelement should be called recursively
 
@@ -83,20 +114,7 @@ func TestBasicHTMLParsing(t *testing.T) {
 	r := strings.NewReader(s)
 	z := html.NewTokenizer(r)
 
-	for {
-		tt := z.Next()
-		switch {
-		case tt == html.ErrorToken:
-			err := z.Err()
-			if err == io.EOF {
-				break
-			}
-			log.Fatal(err)
-		case tt == html.StartTagToken:
-			t := z.Token()
-			el := ConstructAnElement(&t, tt, z)
-			el.Print(0)
-		}
-		break
-	}
+	el := ParseHTML(z)
+
+	el.Print()
 }
